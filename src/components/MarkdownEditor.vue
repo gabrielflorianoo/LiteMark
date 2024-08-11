@@ -75,7 +75,8 @@
                 height: 80vh;
                 cursor: auto;
                 width: 100%;
-                border: 1px solid black;
+                border: 2px solid black;
+                border-radius: 1%;
             }
         }
 
