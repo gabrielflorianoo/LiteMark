@@ -1,9 +1,9 @@
 <script setup lang="ts">
-    import MarkdownEditor from './components/MarkdownEditor.vue';
+    import { RouterView } from 'vue-router';
 </script>
 
 <template>
-    <MarkdownEditor />
+    <router-view></router-view>
 </template>
 
 <style scoped></style>
