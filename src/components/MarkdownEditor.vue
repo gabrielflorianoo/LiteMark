@@ -28,7 +28,7 @@
 </script>
 
 <template>
-    <form action="" class="container is-fluid">
+    <form action="" class="container-fluid">
         <section class="separator">
             <textarea
                 name="markdownEditor"
@@ -37,11 +37,11 @@
                 v-model="markdownRef"
             ></textarea>
             <section
-                class="textarea has-fixed-size has-background-primary result"
+                class="result"
                 disabled
             ></section>
         </section>
-        <section class="buttons is-grouped">
+        <section class="buttons">
             <button class="button is-link" @click.prevent="setResultMarkdown">
                 Submit
             </button>
@@ -51,9 +51,7 @@
 </template>
 
 <style lang="scss" scoped>
-    @import 'https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css';
-
-    .container {
+    .container-fluid {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -62,16 +60,22 @@
         .separator {
             height: 80vh;
             display: flex;
-            width: 50%;
+            width: 100%;
             gap: 10px;
 
             textarea {
+                overflow: auto;
                 height: 80vh;
+                width: 100%;
+                resize: none;
             }
 
             .result {
+                overflow: auto;
                 height: 80vh;
                 cursor: auto;
+                width: 100%;
+                border: 1px solid black;
             }
         }
 
