@@ -526,7 +526,7 @@ import * as __farm_external_module_electron from "electron";import * as __farm_e
             }
         });
         win.webContents.on('did-finish-load', ()=>{
-            win?.webContents.send('main-process-message', (new Date).toLocaleString());
+            win?.webContents.send('main-process-message', new Date().toLocaleString());
         });
         if (process.env.FARM_DEV_SERVER_URL) {
             win.loadURL(process.env.FARM_DEV_SERVER_URL);

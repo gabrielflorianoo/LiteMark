@@ -7,36 +7,31 @@ const path = require('path');
 
 /** @type {import('@electron-forge/shared-types').ForgeConfig} */
 const config = {
-  packagerConfig: {
-    // Ignore all files, including `node_modules`.
-    ignore: /.*/,
-    beforeCopy: [(
-      buildPath,
-      electronVersion,
-      platform,
-      arch,
-      callback,
-    ) => {
-      // Copy some necessary files for running the Electron App.
-      const items = [
-        'dist',
-        'dist-electron',
-        'package.json',
-      ]
-      for (const item of items) {
-        fs.copySync(path.join(__dirname, item), path.join(buildPath, item))
-      }
-      callback()
-    }],
-  },
-  rebuildConfig: {},
-  makers: [
-    new MakerSquirrel({}),
-    new MakerZIP({}, ['darwin']),
-    new MakerRpm({}),
-    new MakerDeb({}),
-  ],
-  plugins: [],
+    packagerConfig: {
+        // Ignore all files, including `node_modules`.
+        ignore: /.*/,
+        beforeCopy: [
+            (buildPath, electronVersion, platform, arch, callback) => {
+                // Copy some necessary files for running the Electron App.
+                const items = ['dist', 'dist-electron', 'package.json'];
+                for (const item of items) {
+                    fs.copySync(
+                        path.join(__dirname, item),
+                        path.join(buildPath, item),
+                    );
+                }
+                callback();
+            },
+        ],
+    },
+    rebuildConfig: {},
+    makers: [
+        new MakerSquirrel({}),
+        new MakerZIP({}, ['darwin']),
+        new MakerRpm({}),
+        new MakerDeb({}),
+    ],
+    plugins: [],
 };
 
 module.exports = config;
