@@ -4,7 +4,9 @@
     <div class="container">
         <nav>
             <ul>
-                <li><strong>LiteMark</strong></li>
+                <li>
+                    <strong><h2>LiteMark</h2></strong>
+                </li>
             </ul>
             <ul>
                 <section class="buttons" role="group">
@@ -18,9 +20,9 @@
                 <header>Recent Files Opened</header>
                 <ul>
                     <!-- Just for testing purposes -->
-                    <li>Example.md</li>
-                    <li>Example2.md</li>
-                    <li>Example3.md</li>
+                    <li><a href="">Example.md</a></li>
+                    <li><a href="">Example2.md</a></li>
+                    <li><a href="">Example3.md</a></li>
                 </ul>
             </article>
         </section>
