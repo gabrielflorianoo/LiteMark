@@ -4,13 +4,15 @@
     "main": "dist-electron/main.js",
     "type": "module",
     "scripts": {
-        "pretty": "prettier --config C:\\DevTools\\.prettierrc.json --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue}\"",
+        "pretty": "prettier --config C:\\DevTools\\.prettierrc.json --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json,vue,html}\"",
         "dev": "farm",
         "build": "farm build && electron-forge package",
         "clean": "farm clean",
-        "farm": "farm"
+        "farm": "farm",
+        "start": "farm"
     },
     "dependencies": {
+        "marked": "^14.0.0",
         "prettier": "^3.3.3",
         "vue": "^3.3.4"
     },
