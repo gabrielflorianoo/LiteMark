@@ -1,4 +1,8 @@
 <script setup lang="ts">
+    import { useRouter } from 'vue-router';
+
+    const router = useRouter();
+
     async function openFile() {
         const filePath = await window.api.openDialog();
 
@@ -6,7 +10,10 @@
             const fileData = await window.api.openFile(filePath[0]);
 
             const fileText = new TextDecoder().decode(fileData);
-            console.log(fileText);
+
+            sessionStorage.setItem('fileText', fileText);
+
+            router.push('/editor');
         } else {
             console.log('Nenhum arquivo selecionado');
         }

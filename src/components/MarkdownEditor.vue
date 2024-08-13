@@ -1,13 +1,14 @@
 <script setup lang="ts">
     import { marked } from 'marked';
-    import { ref, watch } from 'vue';
+    import { computed, ref, watch } from 'vue';
 
     // Reference for the user input
     let markdownRef = ref<string>('');
+    let fileText = computed(() => sessionStorage.getItem('fileText'));
 
     // Log markownRef everytime it is updated *For tests only*
-    watch(markdownRef, () => {
-        console.log(markdownRef.value);
+    watch(markdownRef || fileText, () => {
+        markdownRef.value = fileText.value || '';
     });
 
     // Function for setting the markdown into the result tab
