@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -31,6 +32,7 @@ function createWindow() {
         icon: path.join(process.env.FARM_PUBLIC, 'logo.svg'),
         webPreferences: {
             preload: path.join(__dirname, './preload.mjs'),
+            nodeIntegration: true,
         },
     });
 
@@ -50,6 +52,28 @@ function createWindow() {
         win.loadFile(path.join(process.env.DIST, 'index.html'));
     }
 }
+
+ipcMain.handle('dialog:open', async () => {
+    const result = dialog.showOpenDialogSync({
+        properties: ['openFile'],
+        filters: [
+            {
+                name: 'Markdowns',
+                extensions: ['md'],
+            },
+        ],
+    });
+    return result; // Retorna o resultado da seleção de arquivos/diretórios
+});
+ipcMain.handle('fs:open', async(event: any, path: string) => {
+    try {
+        const result = fs.readFileSync(path, 'utf-8');
+
+        return result;
+    } catch (error) {
+        console.log(error);
+    }
+})
 
 app.on('window-all-closed', () => {
     app.quit();

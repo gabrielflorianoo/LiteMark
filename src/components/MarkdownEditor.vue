@@ -36,16 +36,16 @@
                 placeholder="Digite aqui seu markdown"
                 v-model="markdownRef"
             ></textarea>
-            <section
-                class="result"
-                disabled
-            ></section>
+            <section class="result" disabled></section>
         </section>
         <section class="buttons">
             <button class="button is-link" @click.prevent="setResultMarkdown">
                 Submit
             </button>
             <button class="button" @click.prevent="cancel">Cancel</button>
+            <router-link to="/">
+                <button class="outline contrast">Home</button>
+            </router-link>
         </section>
     </form>
 </template>

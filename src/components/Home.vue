@@ -1,4 +1,11 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+    async function openFile() {
+        const filePath = await window.api.openDialog();
+        const fileData = await window.api.openFile(filePath[0]);
+
+        console.log(fileData);
+    }
+</script>
 
 <template>
     <div class="container">
@@ -10,8 +17,12 @@
             </ul>
             <ul>
                 <section class="buttons" role="group">
-                    <button class="outline">New</button>
-                    <button class="outline">Open</button>
+                    <router-link to="/editor">
+                        <button class="outline">New</button>
+                    </router-link>
+                    <button class="outline" @click.prevent="openFile">
+                        Open
+                    </button>
                 </section>
             </ul>
         </nav>

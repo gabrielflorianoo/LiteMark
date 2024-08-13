@@ -12,6 +12,7 @@
         "start": "farm"
     },
     "dependencies": {
+        "fs": "^0.0.1-security",
         "marked": "^14.0.0",
         "prettier": "^3.3.3",
         "vue": "^3.3.4",

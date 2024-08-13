@@ -1,5 +1,10 @@
 import { ipcRenderer, contextBridge } from 'electron';
 
+contextBridge.exposeInMainWorld('api', {
+    openDialog: () => ipcRenderer.invoke('dialog:open'),
+    openFile: () => ipcRenderer.invoke('fs:open'),
+});
+
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
     on(...args: Parameters<typeof ipcRenderer.on>) {
@@ -22,5 +27,4 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     },
 
     // You can expose other APTs you need here.
-    // ...
 });
