@@ -1,14 +1,36 @@
 <script setup lang="ts">
     import { marked } from 'marked';
-    import { computed, ref, watch } from 'vue';
+    import { computed, onMounted, ref, watch } from 'vue';
 
     // Reference for the user input
     let markdownRef = ref<string>('');
+    let autoFormater = ref<boolean>(false);
     let fileText = computed(() => sessionStorage.getItem('fileText'));
 
-    // Log markownRef everytime it is updated *For tests only*
-    watch(markdownRef || fileText, () => {
+    // Updates markdownRef whenever open a new md file
+    watch(fileText, (newVal) => {
+        markdownRef.value = newVal || '';
+        setResultMarkdown(); // Display the markdown for the user
+    });
+
+    // Sets the value of markdownRef when the page loads
+    onMounted(() => {
         markdownRef.value = fileText.value || '';
+        setResultMarkdown(); // Display the markdown for the user
+    });
+
+    // If clicked check box it will already change the result table
+    watch(autoFormater, (value) => {
+        if (value) {
+            setResultMarkdown();
+        }
+    });
+
+    // Auto changes everytime the user changes the markdown textarea
+    watch(markdownRef, () => {
+        if (autoFormater.value) {
+            setResultMarkdown(); // Format and display markdown if auto formater is enabled
+        }
     });
 
     // Function for setting the markdown into the result tab
@@ -29,66 +51,100 @@
 </script>
 
 <template>
-    <form action="" class="container-fluid">
-        <section class="separator">
-            <textarea
-                name="markdownEditor"
-                class="textarea has-fixed-size"
-                placeholder="Digite aqui seu markdown"
-                v-model="markdownRef"
-            ></textarea>
-            <section class="result" disabled></section>
-        </section>
-        <section class="buttons">
-            <button class="button is-link" @click.prevent="setResultMarkdown">
-                Submit
-            </button>
-            <button class="button" @click.prevent="cancel">Cancel</button>
-            <router-link to="/">
-                <button class="outline contrast">Home</button>
-            </router-link>
-        </section>
-    </form>
+    <section class="body">
+        <nav class="navbar">
+            <ul class="navbarList">
+                <router-link to="/">
+                    <button class="outline contrast">Home</button>
+                </router-link>
+                <li>
+                    <label>
+                        <input
+                            type="checkbox"
+                            v-model="autoFormater"
+                            class="outline contrast"
+                        />
+                        Toggle Auto Formater
+                    </label>
+                </li>
+            </ul>
+        </nav>
+        <form action="" class="container">
+            <section class="separator">
+                <textarea
+                    name="markdownEditor"
+                    placeholder="Digite aqui seu markdown"
+                    v-model="markdownRef"
+                ></textarea>
+                <section
+                    class="result"
+                    v-show="markdownRef !== ''"
+                    disabled
+                ></section>
+                <textarea
+                    v-if="markdownRef === ''"
+                    placeholder="Aqui aparecerá seu markdown"
+                    disabled
+                ></textarea>
+            </section>
+            <section class="buttons">
+                <button class="button" @click.prevent="setResultMarkdown">
+                    Submit
+                </button>
+                <button class="button" @click.prevent="cancel">Cancel</button>
+            </section>
+        </form>
+    </section>
 </template>
 
 <style lang="scss" scoped>
-    .container-fluid {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
+    .body {
+        gap: 10px;
+        margin: 0px;
+        display: grid;
         height: 100vh;
+        grid-template-columns: 1fr;
+        grid-template-rows: 0.15fr 1fr;
 
-        .separator {
-            height: 80vh;
-            display: flex;
-            width: 100%;
-            gap: 10px;
+        .navbar {
+            margin: 0px;
+            display: grid;
+            grid-template-columns: 1fr;
 
-            textarea {
-                overflow: auto;
-                height: 80vh;
-                width: 100%;
-                resize: none;
-            }
-
-            .result {
-                overflow: auto;
-                height: 80vh;
-                cursor: auto;
-                width: 100%;
-                border: 2px solid black;
-                border-radius: 1%;
+            .navbarList {
+                margin: 0px;
+                display: flex;
+                justify-content: space-around;
             }
         }
 
-        .buttons {
-            width: 100%;
-            display: flex;
-            margin-top: 10px;
-            justify-content: space-evenly;
+        .container {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr 0fr;
 
-            button {
-                width: fit-content;
+            .separator {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+
+                .result,
+                textarea {
+                    border: 1px solid rgba(0, 0, 0, 0.4);
+                    border-radius: 1%;
+                    overflow: auto;
+                    cursor: auto;
+                    resize: none;
+                }
+            }
+
+            .buttons {
+                display: flex;
+                justify-content: space-evenly;
+
+                button {
+                    height: fit-content;
+                }
             }
         }
     }
