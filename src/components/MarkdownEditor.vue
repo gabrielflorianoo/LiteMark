@@ -4,8 +4,9 @@
 
     // Reference for the user input
     let markdownRef = ref<string>('');
-    let autoFormater = ref<boolean>(false);
+    let autoLoader = ref<boolean>(false);
     let fileText = computed(() => sessionStorage.getItem('fileText'));
+    let openedFilePath = computed(() => sessionStorage.getItem('filePath'));
 
     // Updates markdownRef whenever open a new md file
     watch(fileText, (newVal) => {
@@ -16,19 +17,30 @@
     // Sets the value of markdownRef when the page loads
     onMounted(() => {
         markdownRef.value = fileText.value || '';
-        setResultMarkdown(); // Display the markdown for the user
+        
+        const storageAutoLoader = sessionStorage.getItem('autoLoader');
+        if (storageAutoLoader == 'yes') {
+            autoLoader.value = true;
+            setResultMarkdown(); // Format and display markdown if auto formater is enabled
+        } else {
+            autoLoader.value = false;
+        }
     });
 
     // If clicked check box it will already change the result table
-    watch(autoFormater, (value) => {
+    watch(autoLoader, (value) => {
+        // Save autoFormatter in the storage
         if (value) {
+            sessionStorage.setItem('autoLoader', 'yes');
             setResultMarkdown();
+        } else {
+            sessionStorage.setItem('autoLoader', 'no');
         }
     });
 
     // Auto changes everytime the user changes the markdown textarea
     watch(markdownRef, () => {
-        if (autoFormater.value) {
+        if (autoLoader.value) {
             setResultMarkdown(); // Format and display markdown if auto formater is enabled
         }
     });
@@ -43,9 +55,10 @@
 
     // Function for saving a file
     async function saveFile() {
-        const result = await window.api.saveFile(markdownRef.value);
-
-        console.log(result);
+        await window.api.saveFile(markdownRef.value);
+        if (openedFilePath) {
+            await window.api.updateFile(markdownRef.value, openedFilePath);
+        }
     }
 
     // Function for reseting the textarea
@@ -71,7 +84,7 @@
                     <label>
                         <input
                             type="checkbox"
-                            v-model="autoFormater"
+                            v-model="autoLoader"
                             class="outline contrast"
                         />
                         Toggle Auto Formater

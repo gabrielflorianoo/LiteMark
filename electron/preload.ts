@@ -4,6 +4,8 @@ contextBridge.exposeInMainWorld('api', {
     openDialog: () => ipcRenderer.invoke('dialog:open'),
     openFile: (path: string) => ipcRenderer.invoke('fs:open', path),
     saveFile: (data: string) => ipcRenderer.invoke('dialog:create', data),
+    updateFile: (data: string, filePath: string) =>
+        ipcRenderer.invoke('fs:update', data, filePath),
 });
 
 // --------- Expose some API to the Renderer process ---------

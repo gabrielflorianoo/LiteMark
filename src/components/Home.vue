@@ -3,6 +3,13 @@
 
     const router = useRouter();
 
+    function resetEditor() {
+        sessionStorage.removeItem('fileText');
+        sessionStorage.removeItem('filePath');
+
+        router.push('/editor');
+    }
+
     async function openFile() {
         const filePath = await window.api.openDialog();
 
@@ -12,6 +19,7 @@
             const fileText = new TextDecoder().decode(fileData);
 
             sessionStorage.setItem('fileText', fileText);
+            sessionStorage.setItem('filePath', filePath[0]);
 
             router.push('/editor');
         } else {
@@ -30,9 +38,9 @@
             </ul>
             <ul>
                 <section class="buttons" role="group">
-                    <router-link to="/editor">
-                        <button class="outline">New</button>
-                    </router-link>
+                    <button class="outline" @click.prevent="resetEditor">
+                        New
+                    </button>
                     <button class="outline" @click.prevent="openFile">
                         Open
                     </button>

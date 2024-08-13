@@ -85,7 +85,20 @@ ipcMain.handle('dialog:create', async (event: any, data: string) => {
         });
 
         try {
-            const fileCreated = writeFileSync(createFilePath, data, {
+            writeFileSync(createFilePath, data, {
+                encoding: 'utf8',
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    } catch (error) {
+        console.log(error);
+    }
+});
+ipcMain.handle('fs:update', async (event: any, data: string, filePath: string) => {
+    try {
+        try {
+            writeFileSync(filePath, data, {
                 encoding: 'utf8',
             });
         } catch (error) {

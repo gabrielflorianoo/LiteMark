@@ -510,7 +510,8 @@ var electron_preload_scripts_filename='';globalThis['__' + 'filename']=electron_
     _f_electron.contextBridge.exposeInMainWorld('api', {
         openDialog: ()=>_f_electron.ipcRenderer.invoke('dialog:open'),
         openFile: (path)=>_f_electron.ipcRenderer.invoke('fs:open', path),
-        saveFile: (data)=>_f_electron.ipcRenderer.invoke('dialog:create', data)
+        saveFile: (data)=>_f_electron.ipcRenderer.invoke('dialog:create', data),
+        updateFile: (data, filePath)=>_f_electron.ipcRenderer.invoke('fs:update', data, filePath)
     });
     _f_electron.contextBridge.exposeInMainWorld('ipcRenderer', {
         on (...args) {
