@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
-import fs from 'fs';
+import { readFileSync } from 'node:fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -65,15 +65,15 @@ ipcMain.handle('dialog:open', async () => {
     });
     return result; // Retorna o resultado da seleção de arquivos/diretórios
 });
-ipcMain.handle('fs:open', async(event: any, path: string) => {
+ipcMain.handle('fs:open', async (event: any, path: string) => {
     try {
-        const result = fs.readFileSync(path, 'utf-8');
+        const result = readFileSync(path);
 
         return result;
     } catch (error) {
         console.log(error);
     }
-})
+});
 
 app.on('window-all-closed', () => {
     app.quit();

@@ -1,9 +1,15 @@
 <script setup lang="ts">
     async function openFile() {
         const filePath = await window.api.openDialog();
-        const fileData = await window.api.openFile(filePath[0]);
 
-        console.log(fileData);
+        if (filePath && filePath[0]) {
+            const fileData = await window.api.openFile(filePath[0]);
+
+            const fileText = new TextDecoder().decode(fileData);
+            console.log(fileText);
+        } else {
+            console.log('Nenhum arquivo selecionado');
+        }
     }
 </script>
 
