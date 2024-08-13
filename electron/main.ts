@@ -68,8 +68,9 @@ ipcMain.handle('dialog:open', async () => {
 ipcMain.handle('fs:open', async (event: any, path: string) => {
     try {
         const result = readFileSync(path);
+        const fileText = new TextDecoder().decode(result);
 
-        return result;
+        return fileText;
     } catch (error) {
         console.log(error);
     }

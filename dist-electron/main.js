@@ -556,7 +556,8 @@ import * as __farm_external_module_electron from "electron";import * as __farm_e
     _f_electron.ipcMain.handle('fs:open', async (event, path)=>{
         try {
             const result = _f_node_fs.readFileSync(path);
-            return result;
+            const fileText = new TextDecoder().decode(result);
+            return fileText;
         } catch (error) {
             console.log(error);
         }

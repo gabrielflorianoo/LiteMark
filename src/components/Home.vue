@@ -20,7 +20,16 @@
         router.push('/editor');
     }
 
-    async function openFile() {
+    async function openThisFile(path: string) {
+        const fileText = await window.api.openFile(path);
+
+        sessionStorage.setItem('fileText', fileText);
+        sessionStorage.setItem('filePath', path);
+
+        router.push('/editor');
+    }
+
+    async function openFileDialog() {
         const filePath = await window.api.openDialog();
 
         if (filePath && filePath[0]) {
@@ -33,11 +42,8 @@
                     JSON.stringify(recentlyOpened.value),
                 );
             }
-            console.log(recentlyOpened.value);
 
-            const fileData = await window.api.openFile(filePath[0]);
-
-            const fileText = new TextDecoder().decode(fileData);
+            const fileText = await window.api.openFile(filePath[0]);
 
             sessionStorage.setItem('fileText', fileText);
             sessionStorage.setItem('filePath', filePath[0]);
@@ -62,7 +68,7 @@
                     <button class="outline" @click.prevent="resetEditor">
                         New
                     </button>
-                    <button class="outline" @click.prevent="openFile">
+                    <button class="outline" @click.prevent="openFileDialog">
                         Open
                     </button>
                 </section>
@@ -73,14 +79,19 @@
                 <header>Recent Files Opened</header>
                 <ul>
                     <!-- Gets the file base name of each path -->
-                    <li v-for="file in recentlyOpened">
-                        <a>{{
-                            (() => {
-                                const fileName = file.split('\\').pop() || '';
-                                const baseName = fileName.split('.')[0];
-                                return baseName;
-                            })()
-                        }}</a>
+                    <li class="recentFileList" v-for="file in recentlyOpened">
+                        <a
+                            class="recentFile"
+                            @click.prevent="openThisFile(file)"
+                            >{{
+                                (() => {
+                                    const fileName =
+                                        file.split('\\').pop() || '';
+                                    const baseName = fileName.split('.')[0];
+                                    return baseName;
+                                })()
+                            }}</a
+                        >
                     </li>
                 </ul>
             </article>
@@ -88,4 +99,62 @@
     </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+    .container {
+        display: grid;
+        height: 100vh;
+        grid-template-rows: 0fr 1fr;
+
+        .recentFiles {
+
+            article {
+                display: grid;
+                grid-template-rows: 0fr 1fr;
+                
+                header {
+                    padding: 1rem;
+                }
+                
+                ul {
+                    height: 50vh;
+                    padding: 1rem;
+                    overflow-y: auto;
+                    
+                    &::-webkit-scrollbar {
+                        width: 8px;
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        background-color: rgba(0, 0, 0, 0.2);
+                    }
+
+                    &::-webkit-scrollbar-thumb:hover {
+                        background-color: rgba(0, 0, 0, 0.3);
+                    }
+
+                    &::-webkit-scrollbar-track {
+                        background: transparent;
+                    }
+
+                    .recentFileList {
+                        list-style: none;
+                        display: grid;
+                    }
+        
+                    .recentFile {
+                        cursor: pointer;
+                        padding: 0.2rem;
+                        transition: background-color 0.3s !important;
+                        text-decoration: none;
+                    }
+        
+                    .recentFile:hover {
+                        background-color: rgba(0, 0, 0, 0.05);
+                    }
+                }
+
+            }
+
+        }
+    }
+</style>
