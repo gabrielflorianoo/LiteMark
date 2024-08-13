@@ -16,8 +16,10 @@
 
     // Sets the value of markdownRef when the page loads
     onMounted(() => {
+        // If has fileText, sets is to it, otherwise sets to empty
         markdownRef.value = fileText.value || '';
         
+        // Creates the reminder of the auto loader in the session storage
         const storageAutoLoader = sessionStorage.getItem('autoLoader');
         if (storageAutoLoader == 'yes') {
             autoLoader.value = true;
