@@ -3,6 +3,7 @@ import { ipcRenderer, contextBridge } from 'electron';
 contextBridge.exposeInMainWorld('api', {
     openDialog: () => ipcRenderer.invoke('dialog:open'),
     openFile: (path: string) => ipcRenderer.invoke('fs:open', path),
+    saveFile: (data: string) => ipcRenderer.invoke('dialog:create', data),
 });
 
 // --------- Expose some API to the Renderer process ---------

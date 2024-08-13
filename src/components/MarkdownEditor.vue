@@ -41,6 +41,13 @@
         resultTable.innerHTML = markdown;
     }
 
+    // Function for saving a file
+    async function saveFile() {
+        const result = await window.api.saveFile(markdownRef.value);
+
+        console.log(result);
+    }
+
     // Function for reseting the textarea
     function cancel() {
         markdownRef.value = '';
@@ -57,6 +64,9 @@
                 <router-link to="/">
                     <button class="outline contrast">Home</button>
                 </router-link>
+                <button class="outline" @click.prevent="saveFile">
+                    Save File
+                </button>
                 <li>
                     <label>
                         <input
@@ -130,6 +140,7 @@
 
                 .result,
                 textarea {
+                    padding: 0.5rem;
                     border: 1px solid rgba(0, 0, 0, 0.4);
                     border-radius: 1%;
                     overflow: auto;

@@ -561,6 +561,36 @@ import * as __farm_external_module_electron from "electron";import * as __farm_e
             console.log(error);
         }
     });
+    _f_electron.ipcMain.handle('dialog:create', async (event, data)=>{
+        try {
+            const createFilePath = _f_electron.dialog.showSaveDialogSync({
+                filters: [
+                    {
+                        name: 'Markdown',
+                        extensions: [
+                            'md'
+                        ]
+                    },
+                    {
+                        name: 'Text File',
+                        extensions: [
+                            'txt',
+                            'rtf'
+                        ]
+                    }
+                ]
+            });
+            try {
+                const fileCreated = _f_node_fs.writeFileSync(createFilePath, data, {
+                    encoding: 'utf8'
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    });
     _f_electron.app.on('window-all-closed', ()=>{
         _f_electron.app.quit();
         win = null;

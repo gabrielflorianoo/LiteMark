@@ -509,7 +509,8 @@ var electron_preload_scripts_filename='';globalThis['__' + 'filename']=electron_
     var _f_electron = farmRequire('electron');
     _f_electron.contextBridge.exposeInMainWorld('api', {
         openDialog: ()=>_f_electron.ipcRenderer.invoke('dialog:open'),
-        openFile: (path)=>_f_electron.ipcRenderer.invoke('fs:open', path)
+        openFile: (path)=>_f_electron.ipcRenderer.invoke('fs:open', path),
+        saveFile: (data)=>_f_electron.ipcRenderer.invoke('dialog:create', data)
     });
     _f_electron.contextBridge.exposeInMainWorld('ipcRenderer', {
         on (...args) {

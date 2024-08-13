@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { app, BrowserWindow, dialog, ipcMain } from 'electron';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -70,6 +70,27 @@ ipcMain.handle('fs:open', async (event: any, path: string) => {
         const result = readFileSync(path);
 
         return result;
+    } catch (error) {
+        console.log(error);
+    }
+});
+ipcMain.handle('dialog:create', async (event: any, data: string) => {
+    try {
+        // Gets the path to create the file
+        const createFilePath = dialog.showSaveDialogSync({
+            filters: [
+                { name: 'Markdown', extensions: ['md'] },
+                { name: 'Text File', extensions: ['txt', 'rtf'] },
+            ],
+        });
+
+        try {
+            const fileCreated = writeFileSync(createFilePath, data, {
+                encoding: 'utf8',
+            });
+        } catch (error) {
+            console.log(error);
+        }
     } catch (error) {
         console.log(error);
     }
